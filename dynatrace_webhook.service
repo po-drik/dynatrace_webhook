@@ -1,0 +1,13 @@
+[Unit]
+Description=Dynatrace Webhook API Custom Integration
+After=network.target
+
+[Service]
+User=root
+ExecStart=/usr/bin/python3 webhook.py run
+WorkingDirectory=/opt/dynatrace/webhook
+Restart=on-failure
+RemainAfterExit=yes
+
+[Install]
+WantedBy=multi-user.target
