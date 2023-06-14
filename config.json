@@ -1,4 +1,7 @@
 {
+	"github": {
+		"repository": "https://github.com/Dynatrace/Custom-Webhook-Python"
+	},
 	"dynatrace": {
 		"tenant": "https://xxxx.live.dynatrace.com",
 		"api_token": "XXXXXXXXX"
