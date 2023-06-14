@@ -9,14 +9,18 @@
 		"interface": "0.0.0.0",
 		"port": 5000
 	},
+	"proxies": {
+		"http_proxy": "http://10.9.8.7:8080",
+		"https_proxy": "http://10.9.8.7:8080",
+		"ftp_proxy": "http://10.9.8.7:8080"
+        },
 	"dir_received": "problems_received",
 	"dir_sent": "problems_sent",
 	"log_dir": "log",
 	"log_file": "webhook.log",
 	"incident_notification": {
 		"active": true,
-		"exec_win": "legacy_script.bat",
-		"exec_unix": "/bin/sh legacy_script.sh"
+		"script": "/bin/sh legacy_script.sh"
 	},
 	"sms_notification": {
 		"active": false,
