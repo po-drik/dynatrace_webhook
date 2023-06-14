@@ -2,64 +2,126 @@
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <style>
+html { font-size: 100%; }
 body {
-	background-color: black;
-    font: normal 12px Consolas, Arial, sans-serif;
+    background-color: #222;
+    padding-left: 2em; padding-right: 2em;
+    border-left: double 3px #111;
+}
+body, p, .stats {
+    font: normal 0.875rem Consolas, Arial, sans-serif;
     color: white;
 }
-h1   {color:  #33a8ff ;}
+hr { color: #3cb371; }
+h1 { color: #33a8ff; }
 h2, h3 {
-    font-size: 14px;
+    font-size: 1.125rem;
     color: white;
 }
 
-table, th, td {
-   border: 1px solid grey;
-   border-collapse: collapse; 
-   font: normal 10px Consolas, Arial, Monospace;
-   color: black;
-}
-
-th {
-    background-color:  #990000;
-    font-weight: bold;
-    color: white;
-}
-
-button {
-    background-color: #00b300;
-    color: white;
-    padding: 2px 4px;
-    text-align: center;
-    text-decoration: none;
+.table_saved, .table_poll {
+    margin: 4px;
+    padding: 4px;
     display: inline-block;
-    font-size: 10px;
+}
+
+.scroll_div {
+    height: 560px;
+    width: 98%;
+    border-radius: 3px;
+    overflow: scroll;
+    top: 0;
 }
 
 table {
-	width: 100%;
-    background-color: white;
+    table-layout: fixed;
+    display: table-header-group;
+    font: normal 1rem Arial, sans-serif;
+    border-collapse: collapse;
+    background: #bbb;
+    overflow-y: auto;
+}
+table.sent tr {
+    height: 1.2rem !important;
+    white-space: nowrap !important;
+}
+thead.sticky {
+    font: bold 1.125rem Arial, sans-serif;
+    position: -webkit-sticky;
+    position: sticky;
+    top: 0;
+}
+td {
+    border: 1px solid #555;
+    padding: 2px 4px 0 4px;
+    text-align: left;
+    height: 1.2rem;
+    max-width: 400px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+tbody {
+    color: black;
+}
+tbody > tr:nth-child(even) {
+    background-color: #ccc;
+}
+tbody > tr:hover {
+    background-color: #a1b79e;
+}
+tbody > tr:nth-child(even):hover {
+    background-color: #c3e0bf;
 }
 
-tr:hover {
-	background-color: #cbfac6;
+button {
+    background-color: #438b46;
+    border: none;
+    color: white;
+    padding: 8px 16px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 0.75rem;
+    margin: 8px 2px;
+    cursor: pointer;
+    border-radius: 4px;
 }
 
-.flashes{
-	color: white;
-	font: normal 12px Consolas, Arial, sans-serif;
+button:hover {
+    background-color: #4caf50;
+}
+.sticky, .inner {
+    background-color: #333;
+    color: white;
+    box-shadow: 0 2px 2px -1px rgba(0, 0, 0, 0.4);
+}
+.inner { font-weight: normal; }
+.flashes {
+    color: white;
+    font: normal 0.75rem Consolas, Arial, sans-serif;
 }
 
+.container {
+    display: flex;
+    align-items: flex-start;
+    width: 60%;
+}
+.item-2 { flex: 1 1 1rem; }
+.item-3 { flex: 1 1 3rem; }
+.item-x { flex: 0 0 1rem;
+    align-self: center;
+    white-space: nowrap;
+}
+.stats { display: none; }
 .usage {
-	color: #00FF00;
-	font: normal 12px Consolas, Arial, sans-serif;
-	display : none;
+    color: #3cb371;
+    font: normal 0.8rem Consolas, Arial, sans-serif;
+    display: none;
 }
-
-
 </style>
 <meta charset="utf-8">
-<link rel="icon" href="https://dt-cdn.net/images/favicon-32x32-32-26d70a5cff.png"> 
+<link rel="icon" href="https://dt-cdn.net/images/favicon-32x32-32-26d70a5cff.png">
 <title>Dynatrace Custom Webhook Integration</title>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
@@ -67,32 +129,40 @@ tr:hover {
 <script>
 function showHideById(divId) {
     var x = document.getElementById(divId);
-    if (x.style.display === "none") {
-        x.style.display = "block";
+    var y = divId.replace(/_saved|_poll/, '');
+    var z = 'btn_'.concat(divId);
+    var b = document.getElementById(z);
+    if (x.style.display === 'none') {
+        x.style.display = 'block';
+        b.innerText = "Hide ".concat(y);
     } else {
-        x.style.display = "none";
+        x.style.display = 'none';
+        b.innerText = "Show ".concat(y);
     }
+}
+function pollProblems(endpoint, token, timeframe) {
+    var url = endpoint + "?api_token=" + token + "&from=now-" + timeframe;
+    console.log("URL:", url);
+    window.open(url, "_blank");
 }
 </script>
 
 </head>
-
 <body>
 
 <div style="display: inline">
     <h1>
-    <img src="https://dt-cdn.net/images/favicon-32x32-32-26d70a5cff.png" width="24"/>
-    	Dynatrace Custom Webhook Integration
-	<img src="https://www.python.org/static/favicon.ico" width="24"/> 
+        <img src="https://dt-cdn.net/images/favicon-32x32-32-26d70a5cff.png" width="24"/>
+        Dynatrace Custom Webhook Integration
+        <img src="https://www.python.org/static/favicon.ico" width="24"/>
     </h1>
 </div>
 
-
 <div class="flashes">
-  {% for message in get_flashed_messages() %}
-    {{ message }}
-  {% endfor %}
+    {% for message in get_flashed_messages() %}
+        {{ message }}
+    {% endfor %}
 </div>
-</br>
+<br />
 </body>
 </html>
