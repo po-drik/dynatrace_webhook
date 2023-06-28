@@ -125,12 +125,28 @@ If you are running the webhook in a corporate network, then you just need to mak
 
 **Custom Payload** In here you define the JSON format that is going to be sent to the custom webhook. Since this sample is for educational purpouses, we only need `State, ProblemID and PID` and the webhook will poll the problem details when receiving a message.
 
-Here is the format so you can copy&paste it:
+Here is the minimal format so you can copy&paste it:
 
 	{
 	"State":"{State}",
 	"ProblemID":"{ProblemID}",
 	"PID":"{PID}"
+	}
+
+Here is the complete format for a production environment:
+
+	{
+	"ProblemID":"{ProblemID}",
+	"PID": "{PID}",
+	"State":"{State}",
+	"ProblemSeverity": "{ProblemSeverity}",
+	"ImpactedEntityNames": "{ImpactedEntityNames}",
+	"ImpactedEntities": {ImpactedEntities},
+	"ProblemImpact": "{ProblemImpact}",
+	"ProblemTitle": "{ProblemTitle}",
+	"ProblemURL": "{ProblemURL}",
+	"Tags": "{Tags}",
+	"ProblemDetailsJSONv2": {ProblemDetailsJSONv2}
 	}
 
 After you have entered the parameters where the webhook is running, click on send notification to send a test message to the webhook. You should see an integration test successful message.  
