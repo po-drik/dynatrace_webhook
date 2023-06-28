@@ -40,8 +40,9 @@ before running the Flask Web Microservice, we should configure some small things
 			"interface": "0.0.0.0",			Interface where the webhook should listen to. Default all interfaces. 
 			"port": 5000				Port where the webhook listens for communication.
 		},
-		"proxies": {					Proxy configurations to reach dynatrace.tenant in case we're behind a firewall.
-			"http_proxy": "http://10.9.8.7:8080",   
+		"proxies": {					Proxy configurations to reach dynatrace.tenant
+			"active": false,			Set to true in case we're behind a firewall.
+   			"http_proxy": "http://10.9.8.7:8080",   
 			"https_proxy": "http://10.9.8.7:8080",  
 			"ftp_proxy": "http://10.9.8.7:8080"      
 		},
