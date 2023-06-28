@@ -133,7 +133,7 @@ Here is the minimal format so you can copy&paste it:
 	"PID":"{PID}"
 	}
 
-Here is the complete format for a production environment:
+Here is a more complete format for a production environment:
 
 	{
 	"ProblemID":"{ProblemID}",
