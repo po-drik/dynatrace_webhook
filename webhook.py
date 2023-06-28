@@ -70,6 +70,9 @@ WEBHOOK_INTERFACE = config['webhook']['interface']
 WEBHOOK_PORT = config['webhook']['port']
 WEBHOOK_USERNAME = getpass.getuser()
 
+# Use proxies when behind a firewall
+PROXY_CONFIGURATION = config['proxies']['active']
+
 # Program to call with the notification
 INCIDENT_NOTIFICATION = config['incident_notification']['active']
 INCIDENT_HANDLER = config['incident_notification']['script']
@@ -376,8 +379,12 @@ def getAuthenticationHeader():
 def get_problemsfeed_by_time(time_option):
     msg = "fetching prob_count for '" + time_option + "' - " + API_ENDPOINT_PROBLEMS
     logging.info(msg)
-    response = requests.get(TENANT_HOST + API_ENDPOINT_PROBLEMS + "?from=now-" + time_option,
-                            headers=getAuthenticationHeader(), verify=verifyRequest(), proxies=PROXIES)
+    if PROXY_CONFIGURATION:
+        response = requests.get(TENANT_HOST + API_ENDPOINT_PROBLEMS + "?from=now-" + time_option,
+                                headers=getAuthenticationHeader(), verify=verifyRequest(), proxies=PROXIES)
+    else:
+        response = requests.get(TENANT_HOST + API_ENDPOINT_PROBLEMS + "?from=now-" + time_option,
+                                headers=getAuthenticationHeader(), verify=verifyRequest())
 
     handle_response_status(msg, response)
     data = json.loads(response.text)
